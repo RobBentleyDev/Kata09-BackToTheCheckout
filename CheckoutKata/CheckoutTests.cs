@@ -22,27 +22,32 @@ namespace CheckoutKata
         [Test]
         public void GivenSingleProduct_WhenScanned_ThenTotalIsPriceOfProduct()
         {
-            var product = new Product("A99", 50);
-
             var checkout = new Checkout();
 
-            checkout.Scan(product);
-            
+            checkout.Scan(productA99());
+
             checkout.Total().Should().Be(50);
         }
 
         [Test]
         public void GivenTwoProducts_WhenScanned_ThenTotalIsPriceOfBothProducts()
         {
-            var product1 = new Product("A99", 50);
-            var product2 = new Product("B15", 30);
-
             var checkout = new Checkout();
 
-            checkout.Scan(product1);
-            checkout.Scan(product2);
+            checkout.Scan(productA99());
+            checkout.Scan(productB15());
 
             checkout.Total().Should().Be(80);
+        }
+
+        private Product productA99()
+        {
+            return new Product("A99", 50);
+        }
+
+        private Product productB15()
+        {
+            return new Product("B15", 30);
         }
     }
 
@@ -70,8 +75,8 @@ namespace CheckoutKata
 
     internal class Product
     {
-        private string sku;
-        private int price;
+        private readonly string sku;
+        private readonly int price;
 
         public Product(string sku, int price)
         {
@@ -79,6 +84,6 @@ namespace CheckoutKata
             this.price = price;
         }
 
-        public decimal Price => this.price;
+        public decimal Price => price;
     }
 }
