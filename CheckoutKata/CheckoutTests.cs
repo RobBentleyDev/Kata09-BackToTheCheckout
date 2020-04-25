@@ -30,24 +30,41 @@ namespace CheckoutKata
             
             checkout.Total().Should().Be(50);
         }
+
+        [Test]
+        public void GivenTwoProducts_WhenScanned_ThenTotalIsPriceOfBothProducts()
+        {
+            var product1 = new Product("A99", 50);
+            var product2 = new Product("B15", 30);
+
+            var checkout = new Checkout();
+
+            checkout.Scan(product1);
+            checkout.Scan(product2);
+
+            checkout.Total().Should().Be(80);
+        }
     }
 
     internal class Checkout
     {
-        private Product scanned;
+        private List<Product> scanned;
 
         public Checkout()
         {
+            scanned = new List<Product>();
         }
 
         internal void Scan(Product product)
         {
-            scanned = product;
+            scanned.Add(product);
         }
 
         internal decimal Total()
         {
-            return scanned.Price;
+            var total = scanned.Sum(product => product.Price);
+
+            return total;
         }
     }
 
