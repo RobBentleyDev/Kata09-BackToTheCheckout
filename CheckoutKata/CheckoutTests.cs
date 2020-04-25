@@ -30,7 +30,7 @@ namespace CheckoutKata
         }
 
         [Test]
-        public void GivenTwoProducts_WhenScanned_ThenTotalIsPriceOfBothProducts()
+        public void GivenTwoProducts_WhenScanned_ThenTotalIsSumOfBothProducts()
         {
             var checkout = new Checkout();
 
@@ -38,6 +38,18 @@ namespace CheckoutKata
             checkout.Scan(productB15());
 
             checkout.Total().Should().Be(80);
+        }
+
+        [Test]
+        public void Given3Products_WhenScanned_ThenTotalIsSumOf3Products()
+        {
+            var checkout = new Checkout();
+
+            checkout.Scan(productA99());
+            checkout.Scan(productB15());
+            checkout.Scan(productC40());
+
+            checkout.Total().Should().Be(140);
         }
 
         private Product productA99()
@@ -48,6 +60,11 @@ namespace CheckoutKata
         private Product productB15()
         {
             return new Product("B15", 30);
+        }
+
+        private Product productC40()
+        {
+            return new Product("C40", 60);
         }
     }
 
