@@ -57,7 +57,7 @@ namespace CheckoutKata
         {
             var checkout = Checkout();
 
-            var basket = new Basket();
+            var basket = Basket();
             basket.Add(productA99());
 
             checkout.Scan(basket);
@@ -70,13 +70,18 @@ namespace CheckoutKata
         {
             var checkout = Checkout();
 
-            var basket = new Basket();
+            var basket = Basket();
             basket.Add(productA99());
             basket.Add(productT34());
 
             checkout.Scan(basket);
 
             checkout.Total().Should().Be(149);
+        }
+
+        private Basket Basket()
+        {
+            return new Basket();
         }
 
         private Checkout Checkout()
