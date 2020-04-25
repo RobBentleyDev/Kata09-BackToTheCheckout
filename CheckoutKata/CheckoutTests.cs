@@ -52,6 +52,19 @@ namespace CheckoutKata
             checkout.Total().Should().Be(140);
         }
 
+        [Test]
+        public void GivenABasketOf1Product_WhenScanned_ThenTotalIsPriceOfProduct()
+        {
+            var checkout = new Checkout();
+
+            var basket = new Basket();
+            basket.Add(productA99());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(50);
+        }
+
         private Product productA99()
         {
             return new Product("A99", 50);
@@ -68,6 +81,26 @@ namespace CheckoutKata
         }
     }
 
+    internal class Basket
+    {
+        private Queue<Product> products;
+        
+        public Basket()
+        {
+            products = new Queue<Product>();
+        }
+
+        internal void Add(Product product)
+        {
+            products.Enqueue(product);
+        }
+
+        internal Product RemoveNext()
+        {
+            return products.Dequeue();
+        }
+    }
+
     internal class Checkout
     {
         private List<Product> scanned;
@@ -80,6 +113,11 @@ namespace CheckoutKata
         internal void Scan(Product product)
         {
             scanned.Add(product);
+        }
+
+        internal void Scan(Basket basket)
+        {
+            scanned.Add(basket.RemoveNext());
         }
 
         internal decimal Total()
