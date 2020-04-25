@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CheckoutKata
 {
@@ -32,17 +34,20 @@ namespace CheckoutKata
 
     internal class Checkout
     {
+        private Product scanned;
+
         public Checkout()
         {
         }
 
         internal void Scan(Product product)
-        {            
+        {
+            scanned = product;
         }
 
         internal decimal Total()
         {
-            return 50;
+            return scanned.Price;
         }
     }
 
@@ -56,5 +61,7 @@ namespace CheckoutKata
             this.sku = sku;
             this.price = price;
         }
+
+        public decimal Price => this.price;
     }
 }
