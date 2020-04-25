@@ -22,7 +22,7 @@ namespace CheckoutKata
         [Test]
         public void GivenSingleProduct_WhenScanned_ThenTotalIsPriceOfProduct()
         {
-            var checkout = new Checkout();
+            var checkout = Checkout();
 
             checkout.Scan(productA99());
 
@@ -32,7 +32,7 @@ namespace CheckoutKata
         [Test]
         public void GivenTwoProducts_WhenScanned_ThenTotalIsSumOfBothProducts()
         {
-            var checkout = new Checkout();
+            var checkout = Checkout();
 
             checkout.Scan(productA99());
             checkout.Scan(productB15());
@@ -43,7 +43,7 @@ namespace CheckoutKata
         [Test]
         public void Given3Products_WhenScanned_ThenTotalIsSumOf3Products()
         {
-            var checkout = new Checkout();
+            var checkout = Checkout();
 
             checkout.Scan(productA99());
             checkout.Scan(productB15());
@@ -55,7 +55,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf1Product_WhenScanned_ThenTotalIsPriceOfProduct()
         {
-            var checkout = new Checkout();
+            var checkout = Checkout();
 
             var basket = new Basket();
             basket.Add(productA99());
@@ -63,6 +63,11 @@ namespace CheckoutKata
             checkout.Scan(basket);
 
             checkout.Total().Should().Be(50);
+        }
+
+        private Checkout Checkout()
+        {
+            return new Checkout();
         }
 
         private Product productA99()
