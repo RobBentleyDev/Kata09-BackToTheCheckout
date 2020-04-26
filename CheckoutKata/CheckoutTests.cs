@@ -140,13 +140,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf2B15ProductsAnd3A99Products_WhenScannedWithMultiplePricingStrategies_ThenTotalIsCombinedSpecialOfferPrice()
         {
-            var discountPricingStrategies = new List<DiscountPricingStrategy>
-            { 
-                DiscountPricingStrategyForProductA99(),
-                DiscountPricingStrategyForProductB15()
-            };
-
-            var checkout = Checkout(discountPricingStrategies);
+            var checkout = Checkout(DiscountPricingStrategies());
 
             var basket = Basket();
             basket.Add(productB15());
@@ -159,6 +153,7 @@ namespace CheckoutKata
 
             checkout.Total().Should().Be(175);
         }
+
 
         private Basket Basket()
         {
@@ -200,12 +195,21 @@ namespace CheckoutKata
             return new Product("T34", 99);
         }
 
-        private static DiscountPricingStrategy DiscountPricingStrategyForProductA99()
+        private List<DiscountPricingStrategy> DiscountPricingStrategies()
+        {
+            return new List<DiscountPricingStrategy>
+            {
+                DiscountPricingStrategyForProductA99(),
+                DiscountPricingStrategyForProductB15()
+            };
+        }
+
+        private DiscountPricingStrategy DiscountPricingStrategyForProductA99()
         {
             return new DiscountPricingStrategy("A99", 3, 20);
         }
 
-        private static DiscountPricingStrategy DiscountPricingStrategyForProductB15()
+        private DiscountPricingStrategy DiscountPricingStrategyForProductB15()
         {
             return new DiscountPricingStrategy("B15", 2, 15);
         }
