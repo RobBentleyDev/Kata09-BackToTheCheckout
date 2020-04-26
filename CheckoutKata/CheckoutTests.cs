@@ -108,36 +108,7 @@ namespace CheckoutKata
         }
 
         [Test]
-        public void GivenABasketOf3A99Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor3()
-        {
-            var checkout = Checkout();
-
-            var basket = Basket();
-            basket.Add(productA99());
-            basket.Add(productA99());
-            basket.Add(productA99());
-
-            checkout.Scan(basket);
-
-            checkout.Total().Should().Be(130);
-        }
-
-        [Test]
-        public void GivenABasketOf2B15Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor2()
-        {
-            var checkout = Checkout();
-
-            var basket = Basket();
-            basket.Add(productB15());
-            basket.Add(productB15());
-
-            checkout.Scan(basket);
-
-            checkout.Total().Should().Be(45);
-        }
-
-        [Test]
-        public void GivenABasketOf2B15ProductsAnd3A99Products_WhenScannedWithMultiplePricingStrategies_ThenTotalIsCombinedSpecialOfferPrice()
+        public void GivenABasketOf2B15ProductsAnd3A99Products_WhenScanned_ThenTotalIsCombinedSpecialOfferPrice()
         {
             var checkout = Checkout();
 
