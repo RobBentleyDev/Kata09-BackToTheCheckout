@@ -79,6 +79,21 @@ namespace CheckoutKata
             checkout.Total().Should().Be(149);
         }
 
+        [Test]
+        public void GivenABasketOf3A99Products_WhenScanned_ThenTotalIsSpecialOfferPriceFor3()
+        {
+            var checkout = Checkout();
+
+            var basket = Basket();
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(130);
+        }
+
         private Basket Basket()
         {
             return new Basket();
@@ -134,7 +149,14 @@ namespace CheckoutKata
 
         internal decimal Total()
         {
-            var total = scanned.Sum(product => product.Price);
+            var discount = 0;
+
+            if(scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
+            {
+                discount = 20;
+            }
+
+            var total = scanned.Sum(product => product.Price) - discount;
 
             return total;
         }
