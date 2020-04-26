@@ -94,6 +94,20 @@ namespace CheckoutKata
             checkout.Total().Should().Be(130);
         }
 
+        [Test]
+        public void GivenABasketOf2B15Products_WhenScanned_ThenTotalIsSpecialOfferPriceFor2()
+        {
+            var checkout = Checkout();
+
+            var basket = Basket();
+            basket.Add(productB15());
+            basket.Add(productB15());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(45);
+        }
+
         private Basket Basket()
         {
             return new Basket();
@@ -154,6 +168,11 @@ namespace CheckoutKata
             if(scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
             {
                 discount = 20;
+            }
+
+            if (scanned.All(product => product.Sku == "B15") && scanned.Count == 2)
+            {
+                discount = 15;
             }
 
             var total = scanned.Sum(product => product.Price) - discount;
