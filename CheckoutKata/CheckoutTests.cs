@@ -111,7 +111,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf3A99Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor3()
         {
-            var checkout = Checkout(DiscountPricingStrategyForProductA99());
+            var checkout = Checkout();
 
             var basket = Basket();
             basket.Add(productA99());
@@ -126,7 +126,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf2B15Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor2()
         {
-            var checkout = Checkout(DiscountPricingStrategyForProductB15());
+            var checkout = Checkout();
 
             var basket = Basket();
             basket.Add(productB15());
@@ -140,7 +140,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf2B15ProductsAnd3A99Products_WhenScannedWithMultiplePricingStrategies_ThenTotalIsCombinedSpecialOfferPrice()
         {
-            var checkout = Checkout(DiscountPricingStrategies());
+            var checkout = Checkout();
 
             var basket = Basket();
             basket.Add(productB15());
@@ -162,17 +162,7 @@ namespace CheckoutKata
 
         private Checkout Checkout()
         {
-            return new Checkout();
-        }
-
-        private Checkout Checkout(DiscountPricingStrategy discountPricingStrategy)
-        {
-            return new Checkout(discountPricingStrategy);
-        }
-
-        private Checkout Checkout(List<DiscountPricingStrategy> discountPricingStrategies)
-        {
-            return new Checkout(discountPricingStrategies);
+            return new Checkout(DiscountPricingStrategies());
         }
 
         private Product productA99()
@@ -218,25 +208,12 @@ namespace CheckoutKata
     internal class Checkout
     {
         private readonly List<DiscountPricingStrategy> discountPricingStrategies;
-        private readonly DiscountPricingStrategy discountPricingStrategy;
         private List<Product> scanned;
-
-        public Checkout() 
-            : this(new DiscountPricingStrategy("NonMatching", -1, 0))
-        {
-        }
-
-        public Checkout (DiscountPricingStrategy discountPricingStrategy) 
-            : this(new List<DiscountPricingStrategy> { discountPricingStrategy})
-        {
-            this.discountPricingStrategy = discountPricingStrategy;
-        }
 
         public Checkout(List<DiscountPricingStrategy> discountPricingStrategies)
         {
             scanned = new List<Product>();
             this.discountPricingStrategies = discountPricingStrategies;
-            this.discountPricingStrategy = discountPricingStrategies[0];
         }
 
         internal void Scan(Product product)
@@ -269,15 +246,6 @@ namespace CheckoutKata
                 }
 
                 totalDiscount = totalDiscount + discount;
-            }
-
-            if (scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
-            {
-                totalDiscount = 20;
-            }
-            else if (scanned.All(product => product.Sku == "B15") && scanned.Count == 2)
-            {
-                totalDiscount = 15;
             }
 
             var total = scanned.Sum(product => product.Price) - totalDiscount;
