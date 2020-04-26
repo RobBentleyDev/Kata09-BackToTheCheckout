@@ -108,6 +108,23 @@ namespace CheckoutKata
             checkout.Total().Should().Be(45);
         }
 
+        [Test]
+        public void GivenABasketOf3A99Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor3()
+        {
+            var discountPricingStrategy = new DiscountPricingStrategy("A99", 3, 20);
+
+            var checkout = Checkout(discountPricingStrategy);
+
+            var basket = Basket();
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(130);
+        }
+
         private Basket Basket()
         {
             return new Basket();
@@ -116,6 +133,11 @@ namespace CheckoutKata
         private Checkout Checkout()
         {
             return new Checkout();
+        }
+
+        private Checkout Checkout(DiscountPricingStrategy discountPricingStrategy)
+        {
+            return new Checkout(discountPricingStrategy);
         }
 
         private Product productA99()
@@ -139,13 +161,34 @@ namespace CheckoutKata
         }
     }
 
+    internal class DiscountPricingStrategy
+    {
+        public DiscountPricingStrategy(string sku, int qualifyingQuantity, int discountGiven)
+        {
+            Sku = sku;
+            QualifyingQuantity = qualifyingQuantity;
+            DiscountGiven = discountGiven;
+        }
+
+        public string Sku { get; }
+        public int QualifyingQuantity { get; set; }
+        public int DiscountGiven { get; set; }
+    }
+
     internal class Checkout
     {
+        private readonly DiscountPricingStrategy discountPricingStrategy;
         private List<Product> scanned;
 
-        public Checkout()
+        public Checkout() 
+            : this(new DiscountPricingStrategy("NonMatching", -1, 0))
+        {
+        }
+
+        public Checkout (DiscountPricingStrategy discountPricingStrategy)
         {
             scanned = new List<Product>();
+            this.discountPricingStrategy = discountPricingStrategy;
         }
 
         internal void Scan(Product product)
@@ -165,7 +208,12 @@ namespace CheckoutKata
         {
             var discount = 0;
 
-            if(scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
+            if(scanned.All(product => product.Sku == discountPricingStrategy.Sku) 
+                && scanned.Count == discountPricingStrategy.QualifyingQuantity)
+            {
+                discount = discountPricingStrategy.DiscountGiven;
+            }
+            else if (scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
             {
                 discount = 20;
             }
