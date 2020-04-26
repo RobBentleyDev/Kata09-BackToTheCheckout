@@ -140,6 +140,27 @@ namespace CheckoutKata
             checkout.Total().Should().Be(90);
         }
 
+        [Test]
+        public void GivenABasketOf9A99Products_WhenScanned_ThenTotalIsCombinedSpecialOfferPrice()
+        {
+            var checkout = Checkout();
+
+            var basket = Basket();
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(390);
+        }
+
         private Basket Basket()
         {
             return new Basket();
