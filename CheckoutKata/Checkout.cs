@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CheckoutKata
@@ -53,9 +54,10 @@ namespace CheckoutKata
             var productsForStrategy = scanned
                 .Where(product => product.Sku == pricingStrategy.Sku);
 
-            if (productsForStrategy.Count() == pricingStrategy.QualifyingQuantity)
+            var discountMultipier = productsForStrategy.Count() / pricingStrategy.QualifyingQuantity;
+            if (discountMultipier > 0)
             {
-                discount = pricingStrategy.DiscountGiven;
+                discount = pricingStrategy.DiscountGiven * discountMultipier ;
             }
 
             return discount;

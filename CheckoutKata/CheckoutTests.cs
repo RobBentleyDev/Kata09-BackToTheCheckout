@@ -124,6 +124,21 @@ namespace CheckoutKata
             checkout.Total().Should().Be(175);
         }
 
+        [Test]
+        public void GivenABasketOf4B15Products_WhenScanned_ThenTotalIsCombinedSpecialOfferPrice()
+        {
+            var checkout = Checkout();
+
+            var basket = Basket();
+            basket.Add(productB15());
+            basket.Add(productB15());
+            basket.Add(productB15());
+            basket.Add(productB15());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(90);
+        }
 
         private Basket Basket()
         {
