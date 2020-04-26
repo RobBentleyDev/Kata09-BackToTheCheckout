@@ -219,8 +219,7 @@ namespace CheckoutKata
             {
                 discount = 20;
             }
-
-            if (scanned.All(product => product.Sku == "B15") && scanned.Count == 2)
+            else if (scanned.All(product => product.Sku == "B15") && scanned.Count == 2)
             {
                 discount = 15;
             }
