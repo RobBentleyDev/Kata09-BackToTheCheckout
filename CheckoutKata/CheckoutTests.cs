@@ -111,9 +111,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf3A99Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor3()
         {
-            var discountPricingStrategy = new DiscountPricingStrategy("A99", 3, 20);
-
-            var checkout = Checkout(discountPricingStrategy);
+            var checkout = Checkout(DiscountPricingStrategyForProductA99());
 
             var basket = Basket();
             basket.Add(productA99());
@@ -128,9 +126,7 @@ namespace CheckoutKata
         [Test]
         public void GivenABasketOf2B15Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor2()
         {
-            var discountPricingStrategy = new DiscountPricingStrategy("B15", 2, 15);
-
-            var checkout = Checkout(discountPricingStrategy);
+            var checkout = Checkout(DiscountPricingStrategyForProductB15());
 
             var basket = Basket();
             basket.Add(productB15());
@@ -145,9 +141,9 @@ namespace CheckoutKata
         public void GivenABasketOf2B15ProductsAnd3A99Products_WhenScannedWithMultiplePricingStrategies_ThenTotalIsCombinedSpecialOfferPrice()
         {
             var discountPricingStrategies = new List<DiscountPricingStrategy>
-            {
-                new DiscountPricingStrategy("A99", 3, 20),
-                new DiscountPricingStrategy("B15", 2, 15)
+            { 
+                DiscountPricingStrategyForProductA99(),
+                DiscountPricingStrategyForProductB15()
             };
 
             var checkout = Checkout(discountPricingStrategies);
@@ -202,6 +198,16 @@ namespace CheckoutKata
         private Product productT34()
         {
             return new Product("T34", 99);
+        }
+
+        private static DiscountPricingStrategy DiscountPricingStrategyForProductA99()
+        {
+            return new DiscountPricingStrategy("A99", 3, 20);
+        }
+
+        private static DiscountPricingStrategy DiscountPricingStrategyForProductB15()
+        {
+            return new DiscountPricingStrategy("B15", 2, 15);
         }
     }
 
