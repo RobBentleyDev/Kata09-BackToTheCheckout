@@ -231,26 +231,36 @@ namespace CheckoutKata
 
         internal decimal Total()
         {
-            var totalDiscount = 0;
-
-            foreach(var pricingStrategy in discountPricingStrategies)
-            {
-                var discount = 0;
-
-                var productsForStrategy = scanned
-                    .Where(product => product.Sku == pricingStrategy.Sku);
-
-                if (productsForStrategy.Count() == pricingStrategy.QualifyingQuantity)
-                {
-                    discount = pricingStrategy.DiscountGiven;
-                }
-
-                totalDiscount = totalDiscount + discount;
-            }
-
-            var total = scanned.Sum(product => product.Price) - totalDiscount;
+            var total = scanned.Sum(product => product.Price) - TotalDiscount();
 
             return total;
+        }
+
+        private int TotalDiscount()
+        {
+            var totalDiscount = 0;
+
+            foreach (var pricingStrategy in discountPricingStrategies)
+            {
+                totalDiscount = totalDiscount + DiscountForStrategy(pricingStrategy);
+            }
+
+            return totalDiscount;
+        }
+
+        private int DiscountForStrategy(DiscountPricingStrategy pricingStrategy)
+        {
+            var discount = 0;
+
+            var productsForStrategy = scanned
+                .Where(product => product.Sku == pricingStrategy.Sku);
+
+            if (productsForStrategy.Count() == pricingStrategy.QualifyingQuantity)
+            {
+                discount = pricingStrategy.DiscountGiven;
+            }
+
+            return discount;
         }
     }
 }
