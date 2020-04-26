@@ -110,28 +110,6 @@ namespace CheckoutKata
         }
     }
 
-    internal class Basket
-    {
-        private Queue<Product> products;
-        
-        public Basket()
-        {
-            products = new Queue<Product>();
-        }
-
-        public bool HasItems => products.Count > 0;
-
-        internal void Add(Product product)
-        {
-            products.Enqueue(product);
-        }
-
-        internal Product RemoveNext()
-        {
-            return products.Dequeue();
-        }
-    }
-
     internal class Checkout
     {
         private List<Product> scanned;
@@ -160,17 +138,5 @@ namespace CheckoutKata
 
             return total;
         }
-    }
-
-    internal class Product
-    {
-        public Product(string sku, int price)
-        {
-            Sku = sku;
-            Price = price;
-        }
-
-        public decimal Price { get; }
-        public string Sku { get; }
     }
 }
