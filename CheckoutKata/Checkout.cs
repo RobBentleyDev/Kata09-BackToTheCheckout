@@ -54,10 +54,12 @@ namespace CheckoutKata
             var productsForStrategy = scanned
                 .Where(product => product.Sku == pricingStrategy.Sku);
 
-            var discountMultipier = productsForStrategy.Count() / pricingStrategy.QualifyingQuantity;
-            if (discountMultipier > 0)
+            int wholeMultiplesOfQualifyingQuantity = 
+                productsForStrategy.Count() / pricingStrategy.QualifyingQuantity;
+
+            if (wholeMultiplesOfQualifyingQuantity > 0)
             {
-                discount = pricingStrategy.DiscountGiven * discountMultipier ;
+                discount = pricingStrategy.DiscountGiven * wholeMultiplesOfQualifyingQuantity ;
             }
 
             return discount;
