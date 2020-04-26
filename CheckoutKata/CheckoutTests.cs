@@ -150,7 +150,7 @@ namespace CheckoutKata
         {
             while(basket.HasItems)
             {
-                scanned.Add(basket.RemoveNext());
+                Scan(basket.RemoveNext());
             }
         }
 
@@ -164,15 +164,13 @@ namespace CheckoutKata
 
     internal class Product
     {
-        private readonly string sku;
-        private readonly int price;
-
         public Product(string sku, int price)
         {
-            this.sku = sku;
-            this.price = price;
+            Sku = sku;
+            Price = price;
         }
 
-        public decimal Price => price;
+        public decimal Price { get; }
+        public string Sku { get; }
     }
 }
