@@ -125,6 +125,22 @@ namespace CheckoutKata
             checkout.Total().Should().Be(130);
         }
 
+        [Test]
+        public void GivenABasketOf2B15Products_WhenScannedWithPricingStrategy_ThenTotalIsSpecialOfferPriceFor2()
+        {
+            var discountPricingStrategy = new DiscountPricingStrategy("B15", 2, 15);
+
+            var checkout = Checkout(discountPricingStrategy);
+
+            var basket = Basket();
+            basket.Add(productB15());
+            basket.Add(productB15());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(45);
+        }
+
         private Basket Basket()
         {
             return new Basket();
