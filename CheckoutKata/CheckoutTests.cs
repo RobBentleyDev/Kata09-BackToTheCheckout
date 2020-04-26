@@ -141,6 +141,29 @@ namespace CheckoutKata
             checkout.Total().Should().Be(45);
         }
 
+        [Test]
+        public void GivenABasketOf2B15ProductsAnd3A99Products_WhenScannedWithMultiplePricingStrategies_ThenTotalIsCombinedSpecialOfferPrice()
+        {
+            var discountPricingStrategies = new List<DiscountPricingStrategy>
+            {
+                new DiscountPricingStrategy("A99", 3, 20),
+                new DiscountPricingStrategy("B15", 2, 15)
+            };
+
+            var checkout = Checkout(discountPricingStrategies);
+
+            var basket = Basket();
+            basket.Add(productB15());
+            basket.Add(productB15());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(175);
+        }
+
         private Basket Basket()
         {
             return new Basket();
@@ -154,6 +177,11 @@ namespace CheckoutKata
         private Checkout Checkout(DiscountPricingStrategy discountPricingStrategy)
         {
             return new Checkout(discountPricingStrategy);
+        }
+
+        private Checkout Checkout(List<DiscountPricingStrategy> discountPricingStrategies)
+        {
+            return new Checkout(discountPricingStrategies);
         }
 
         private Product productA99()
@@ -179,6 +207,7 @@ namespace CheckoutKata
 
     internal class Checkout
     {
+        private readonly List<DiscountPricingStrategy> discountPricingStrategies;
         private readonly DiscountPricingStrategy discountPricingStrategy;
         private List<Product> scanned;
 
@@ -187,10 +216,17 @@ namespace CheckoutKata
         {
         }
 
-        public Checkout (DiscountPricingStrategy discountPricingStrategy)
+        public Checkout (DiscountPricingStrategy discountPricingStrategy) 
+            : this(new List<DiscountPricingStrategy> { discountPricingStrategy})
+        {
+            this.discountPricingStrategy = discountPricingStrategy;
+        }
+
+        public Checkout(List<DiscountPricingStrategy> discountPricingStrategies)
         {
             scanned = new List<Product>();
-            this.discountPricingStrategy = discountPricingStrategy;
+            this.discountPricingStrategies = discountPricingStrategies;
+            this.discountPricingStrategy = discountPricingStrategies[0];
         }
 
         internal void Scan(Product product)
@@ -208,23 +244,33 @@ namespace CheckoutKata
 
         internal decimal Total()
         {
-            var discount = 0;
+            var totalDiscount = 0;
 
-            if(scanned.All(product => product.Sku == discountPricingStrategy.Sku) 
-                && scanned.Count == discountPricingStrategy.QualifyingQuantity)
+            foreach(var pricingStrategy in discountPricingStrategies)
             {
-                discount = discountPricingStrategy.DiscountGiven;
+                var discount = 0;
+
+                var productsForStrategy = scanned
+                    .Where(product => product.Sku == pricingStrategy.Sku);
+
+                if (productsForStrategy.Count() == pricingStrategy.QualifyingQuantity)
+                {
+                    discount = pricingStrategy.DiscountGiven;
+                }
+
+                totalDiscount = totalDiscount + discount;
             }
-            else if (scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
+
+            if (scanned.All(product => product.Sku == "A99") && scanned.Count == 3)
             {
-                discount = 20;
+                totalDiscount = 20;
             }
             else if (scanned.All(product => product.Sku == "B15") && scanned.Count == 2)
             {
-                discount = 15;
+                totalDiscount = 15;
             }
 
-            var total = scanned.Sum(product => product.Price) - discount;
+            var total = scanned.Sum(product => product.Price) - totalDiscount;
 
             return total;
         }
