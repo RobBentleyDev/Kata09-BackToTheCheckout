@@ -195,6 +195,28 @@ namespace CheckoutKata
             checkout.Total().Should().Be(230);
         }
 
+        [Test]
+        public void GivenABasketOfNonOfferProducts_WhenScanned_ThenTotalIsCombinedTotalOfAllProducts()
+        {
+            var checkout = Checkout();
+
+            // C = 60 * 3 = 180
+            // T = 99 * 4 = 396
+            // Expected = 576
+            var basket = Basket();
+            basket.Add(productC40());
+            basket.Add(productT34());
+            basket.Add(productT34());
+            basket.Add(productC40());
+            basket.Add(productT34());
+            basket.Add(productC40());
+            basket.Add(productT34());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(576);
+        }
+
         private Basket Basket()
         {
             return new Basket();
