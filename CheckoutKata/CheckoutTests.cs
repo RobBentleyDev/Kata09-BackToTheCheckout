@@ -12,7 +12,7 @@ namespace CheckoutKata
         // [done] Total of a Single product
         // [done] Calculate the total price of all individual products
         // [done] Calculate the total price of all items, taking into account weekly offers
-        // Refactor Checkout to use a PricingGroups class 
+        // Refactor Checkout to use a PricingGroups class
 
         [Test]
         public void GivenSingleProduct_WhenScanned_ThenTotalIsPriceOfProduct()
@@ -293,12 +293,12 @@ namespace CheckoutKata
 
         private DiscountPricingStrategy DiscountPricingStrategyForProductA99()
         {
-            return new DiscountPricingStrategy("A99", 3, 20);
+            return new DiscountPricingStrategy(productA99().Sku, 3, 20);
         }
 
         private DiscountPricingStrategy DiscountPricingStrategyForProductB15()
         {
-            return new DiscountPricingStrategy("B15", 2, 15);
+            return new DiscountPricingStrategy(productB15().Sku, 2, 15);
         }
     }
 }
