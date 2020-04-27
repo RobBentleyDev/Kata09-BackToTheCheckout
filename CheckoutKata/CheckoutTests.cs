@@ -9,9 +9,10 @@ namespace CheckoutKata
 
     public class CheckoutTests
     {
-        // Total of a Single product
-        // Calculate the total price of all individual products
-        // Calculate the total price of all items, taking into account weekly offers
+        // [done] Total of a Single product
+        // [done] Calculate the total price of all individual products
+        // [done] Calculate the total price of all items, taking into account weekly offers
+        // Refactor Checkout to use a PricingGroups class 
 
         [Test]
         public void GivenSingleProduct_WhenScanned_ThenTotalIsPriceOfProduct()
@@ -221,7 +222,7 @@ namespace CheckoutKata
             // T = 99 * 4 = 396
             // A = 50 * 10 - 3 * 20 = 440
             // B = 30 * 5 - 2 * 15 = 120
-            // 1136
+            // Expected = 1136
             var basket = Basket();
             basket.Add(productC40());
             basket.Add(productA99());
