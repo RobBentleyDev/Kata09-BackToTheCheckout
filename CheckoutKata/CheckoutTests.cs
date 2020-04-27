@@ -217,6 +217,45 @@ namespace CheckoutKata
             checkout.Total().Should().Be(576);
         }
 
+        [Test]
+        public void GivenAMixedBasketProducts_WhenScanned_ThenTotalIsCombinedTotalOfAllProductsWithOffersApplied()
+        {
+            var checkout = Checkout();
+
+            // C = 60 * 3 = 180
+            // T = 99 * 4 = 396
+            // A = 50 * 10 - 3 * 20 = 440
+            // B = 30 * 5 - 2 * 15 = 120
+            // 1136
+            var basket = Basket();
+            basket.Add(productC40());
+            basket.Add(productT34());
+            basket.Add(productT34());
+            basket.Add(productC40());
+            basket.Add(productT34());
+            basket.Add(productC40());
+            basket.Add(productT34());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productA99());
+            basket.Add(productB15());
+            basket.Add(productB15());
+            basket.Add(productB15());
+            basket.Add(productB15());
+            basket.Add(productB15());
+
+            checkout.Scan(basket);
+
+            checkout.Total().Should().Be(1136);
+        }
+
         private Basket Basket()
         {
             return new Basket();
