@@ -9,11 +9,6 @@ namespace CheckoutKata
 
     public class CheckoutTests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         // Total of a Single product
         // Calculate the total price of all individual products
         // Calculate the total price of all items, taking into account weekly offers
