@@ -13,6 +13,7 @@ namespace CheckoutKata
         // [done] Calculate the total price of all individual products
         // [done] Calculate the total price of all items, taking into account weekly offers
         // Refactor Checkout to use a PricingGroups class
+        // Use a Money class to wrap decimal in Checkout
 
         [Test]
         public void GivenSingleProduct_WhenScanned_ThenTotalIsPriceOfProduct()
