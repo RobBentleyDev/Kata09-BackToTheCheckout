@@ -229,27 +229,27 @@ namespace CheckoutKata
             // 1136
             var basket = Basket();
             basket.Add(productC40());
+            basket.Add(productA99());
+            basket.Add(productB15());
             basket.Add(productT34());
-            basket.Add(productT34());
+            basket.Add(productA99());
+            basket.Add(productC40());
+            basket.Add(productA99());
             basket.Add(productC40());
             basket.Add(productT34());
-            basket.Add(productC40());
+            basket.Add(productA99());
+            basket.Add(productB15());
+            basket.Add(productA99());
             basket.Add(productT34());
             basket.Add(productA99());
             basket.Add(productA99());
-            basket.Add(productA99());
-            basket.Add(productA99());
-            basket.Add(productA99());
-            basket.Add(productA99());
-            basket.Add(productA99());
-            basket.Add(productA99());
+            basket.Add(productB15());
+            basket.Add(productT34());
+            basket.Add(productB15());
             basket.Add(productA99());
             basket.Add(productA99());
             basket.Add(productB15());
-            basket.Add(productB15());
-            basket.Add(productB15());
-            basket.Add(productB15());
-            basket.Add(productB15());
+            basket.Add(productA99());
 
             checkout.Scan(basket);
 
